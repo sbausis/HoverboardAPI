@@ -1,5 +1,0 @@
-branches:
-  only: master
-language: minimal
-sudo: false
-script: bash scripts/update_arduino_branch.sh
