@@ -43,11 +43,36 @@ class HoverboardAPI
     void sendBuzzer(uint8_t buzzerFreq = 4, uint8_t buzzerPattern = 0, uint16_t buzzerLen = 100, char som = PROTOCOL_SOM_NOACK);
     void sendCounterReset(char som = PROTOCOL_SOM_ACK);
 
-    float getBatteryVoltage();
-    float getMotorAmpsAvg(uint8_t motor);
     int getTxBufferLevel();
+	
+    float getBatteryVoltage();
+	int getBatteryVoltageRaw();
+	
+	float getBoardTemperature();
+	float getBoardTemperatureFiltered();
+	int getBoardTemperatureRaw();
+	
+	int isCharging();
+	
+	int getDCCurrentLimit();
+	int getDCCurrentLimitAdc();
+	
+	float getMotorAmps(uint8_t motor);
+    float getMotorAmpsAvg(uint8_t motor);
+	float getMotorAmpsAvgAcc(uint8_t motor);
+	
+	int getMotorPwmLimiter(uint8_t motor);
+	int getMotorPwmRequested(uint8_t motor);
+	int getMotorPwmActual(uint8_t motor);
+	
     double getSpeed_kmh();
     double getSteer_kmh();
+    double getSpeed_mms();
+    double getSteer_mms();
+    double getSpeed0_kmh();
+    double getSpeed1_kmh();
+    double getSpeed0_mms();
+    double getSpeed1_mms();
 
     void resetCounters();
     void printStats(Stream &Port);

@@ -139,19 +139,6 @@ void HoverboardAPI::requestRead(Codes code, char som) {
 }
 
 /***************************************************************************
- * returns electrical Measurements. Readout has to be requested before with
- * requestRead or scheduling.
- ***************************************************************************/
-float HoverboardAPI::getBatteryVoltage() {
-  return electrical_measurements.batteryVoltage;
-}
-
-float HoverboardAPI::getMotorAmpsAvg(uint8_t motor) {
-  if(motor > sizeof(electrical_measurements.motors)/sizeof(electrical_measurements.motors[0])) return -1.0;
-  return electrical_measurements.motors[motor].dcAmpsAvg;
-}
-
-/***************************************************************************
  * Schedules periodic transmission of value from control to hoverboard
  * count -1 for indefinetely
  ***************************************************************************/
@@ -374,6 +361,71 @@ void HoverboardAPI::resetCounters() {
 }
 
 /***************************************************************************
+ * returns electrical Measurements. Readout has to be requested before with
+ * requestRead or scheduling.
+ ***************************************************************************/
+float HoverboardAPI::getBatteryVoltage() {
+  return electrical_measurements.batteryVoltage;
+}
+
+int HoverboardAPI::getBatteryVoltageRaw() {
+  return electrical_measurements.bat_raw;
+}
+
+float HoverboardAPI::getBoardTemperature() {
+  return electrical_measurements.board_temp_deg_c;
+}
+
+float HoverboardAPI::getBoardTemperatureFiltered() {
+  return electrical_measurements.board_temp_filtered;
+}
+
+int HoverboardAPI::getBoardTemperatureRaw() {
+  return electrical_measurements.board_temp_raw;
+}
+
+int HoverboardAPI::isCharging() {
+  return electrical_measurements.charging;
+}
+
+int HoverboardAPI::getDCCurrentLimit() {
+  return (electrical_measurements.dcCurLim) / 100.0;
+}
+int HoverboardAPI::getDCCurrentLimitAdc() {
+  return electrical_measurements.dc_adc_limit;
+}
+
+float HoverboardAPI::getMotorAmps(uint8_t motor) {
+  if(motor > sizeof(electrical_measurements.motors)/sizeof(electrical_measurements.motors[0])) return -1.0;
+  return electrical_measurements.motors[motor].dcAmps;
+}
+
+float HoverboardAPI::getMotorAmpsAvg(uint8_t motor) {
+  if(motor > sizeof(electrical_measurements.motors)/sizeof(electrical_measurements.motors[0])) return -1.0;
+  return electrical_measurements.motors[motor].dcAmpsAvg;
+}
+
+float HoverboardAPI::getMotorAmpsAvgAcc(uint8_t motor) {
+  if(motor > sizeof(electrical_measurements.motors)/sizeof(electrical_measurements.motors[0])) return -1.0;
+  return electrical_measurements.motors[motor].dcAmpsAvgAcc;
+}
+
+int HoverboardAPI::getMotorPwmLimiter(uint8_t motor) {
+  if(motor > sizeof(electrical_measurements.motors)/sizeof(electrical_measurements.motors[0])) return -1.0;
+  return electrical_measurements.motors[motor].pwm_limiter;
+}
+
+int HoverboardAPI::getMotorPwmRequested(uint8_t motor) {
+  if(motor > sizeof(electrical_measurements.motors)/sizeof(electrical_measurements.motors[0])) return -1.0;
+  return electrical_measurements.motors[motor].pwm_requested;
+}
+
+int HoverboardAPI::getMotorPwmActual(uint8_t motor) {
+  if(motor > sizeof(electrical_measurements.motors)/sizeof(electrical_measurements.motors[0])) return -1.0;
+  return electrical_measurements.motors[motor].pwm_actual;
+}
+
+/***************************************************************************
  * returns hall data. Readout has to be requested before with
  * requestRead or scheduling.
  ***************************************************************************/
@@ -383,4 +435,28 @@ double HoverboardAPI::getSpeed_kmh() {
 
 double HoverboardAPI::getSteer_kmh() {
   return   (HallData[0].HallSpeed_mm_per_s * 3600.0 / 1000000.0 )- getSpeed_kmh();
+}
+
+double HoverboardAPI::getSpeed_mms() {
+  return   (HallData[0].HallSpeed_mm_per_s + HallData[1].HallSpeed_mm_per_s) / 2.0;
+}
+
+double HoverboardAPI::getSteer_mms() {
+  return   HallData[0].HallSpeed_mm_per_s - getSpeed_mms();
+}
+
+double HoverboardAPI::getSpeed0_mms() {
+  return   HallData[0].HallSpeed_mm_per_s;
+}
+
+double HoverboardAPI::getSpeed1_mms() {
+  return   HallData[1].HallSpeed_mm_per_s;
+}
+
+double HoverboardAPI::getSpeed0_kmh() {
+  return   HallData[0].HallSpeed_mm_per_s * 3600.0 / 1000000.0;
+}
+
+double HoverboardAPI::getSpeed1_kmh() {
+  return   HallData[1].HallSpeed_mm_per_s * 3600.0 / 1000000.0;
 }
